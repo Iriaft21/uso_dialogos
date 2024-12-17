@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">uso_dialogos</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="asignatura">Asignatura:</string>
+    <string name="descripcion">Descripcion:</string>
+    <string name="hint_descripcion">descripcion</string>
+    <string name="hint_entrega">dd/mm/yy hh:mm</string>
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_cancelar">Cancelar</string>
+
+    <string-array name="asignaturas">
+        <item>AD</item>
+        <item>DINT</item>
+        <item>EIE</item>
+        <item>PMDM</item>
+        <item>PSP</item>
+    </string-array>
+</resources>
