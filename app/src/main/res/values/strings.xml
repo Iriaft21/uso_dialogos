@@ -8,6 +8,8 @@
     <string name="hint_entrega">dd/mm/yy hh:mm</string>
     <string name="btn_guardar">Guardar</string>
     <string name="btn_cancelar">Cancelar</string>
+    <string name="hint_fechaentrega">dd/mm/yy</string>
+    <string name="hint_horaentrega">hh:mm</string>
 
     <string-array name="asignaturas">
         <item>AD</item>

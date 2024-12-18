@@ -41,10 +41,42 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:ems="10"
-            android:hint="@string/hint_entrega"
+            android:hint="@string/hint_fechaentrega"
             android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_descripcion" />
+
+        <EditText
+            android:id="@+id/txt_horaentrega"
+            android:layout_width="337dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="@string/hint_horaentrega"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_entrega" />
+
+        <Button
+            android:id="@+id/btn_guardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="52dp"
+            android:text="@string/btn_guardar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_horaentrega" />
+
+        <Button
+            android:id="@+id/btn_cancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
+            android:text="@string/btn_cancelar"
+            app:layout_constraintEnd_toStartOf="@+id/btn_guardar"
+            app:layout_constraintTop_toBottomOf="@+id/txt_horaentrega" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

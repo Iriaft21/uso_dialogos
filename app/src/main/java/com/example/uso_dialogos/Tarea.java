@@ -13,11 +13,11 @@ public class Tarea implements Parcelable {
     private String horaEntrega;
     private String estado;
 
-    public Tarea(String asignatura, String fechaEntrega, String horaEntrega, String descripcion, String estado) {
+    public Tarea(String asignatura, String fechaEntrega, String descripcion, String horaEntrega,  String estado) {
         this.asignatura = asignatura;
+        this.descripcion = descripcion;
         this.fechaEntrega = fechaEntrega;
         this.horaEntrega = horaEntrega;
-        this.descripcion = descripcion;
         this.estado = estado;
     }
 
