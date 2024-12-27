@@ -3,6 +3,7 @@ package com.example.uso_dialogos;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,8 +27,11 @@ public class DialogoFragment extends DialogFragment {
 
     private String asignatura;
     private String descripcion;
-    private String fechaEntrega;
-    private String horaEntrega;
+    private DialogoFragmentListener listener;
+
+    public interface DialogoFragmentListener {
+        void guardarTarea(Bundle bundle);
+    }
 
     @NonNull
     @Override
@@ -53,9 +57,8 @@ public class DialogoFragment extends DialogFragment {
         });
 
         TextView txt_descripcion = view.findViewById(R.id.txt_descripcion);
-        descripcion = (String) txt_descripcion.getText();
-        TextView fechaEntrega = view.findViewById(R.id.txt_entrega);
-        fechaEntrega.setOnClickListener(new View.OnClickListener() {
+        TextView fechaEntrega_txt = view.findViewById(R.id.txt_entrega);
+        fechaEntrega_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //fecha y hora
@@ -70,16 +73,16 @@ public class DialogoFragment extends DialogFragment {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                String fecha = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                                fechaEntrega.setText(fecha);
+                                String fecha= dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                                fechaEntrega_txt.setText(fecha);
                             }
                         }, year, month, day);
                 datePickerDialog.show();
             }
         });
 
-        TextView horaEntrega = view.findViewById(R.id.txt_horaentrega);
-        horaEntrega.setOnClickListener(new View.OnClickListener() {
+        TextView horaEntrega_txt = view.findViewById(R.id.txt_horaentrega);
+        horaEntrega_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Calendar c = Calendar.getInstance();
@@ -93,7 +96,8 @@ public class DialogoFragment extends DialogFragment {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-
+                                String hora = hourOfDay + ":" + minute;
+                                horaEntrega_txt.setText(hora);
                             }
                         }, hora, minuto, false);
                 timePickerDialog.show();
@@ -104,22 +108,31 @@ public class DialogoFragment extends DialogFragment {
         builder.setTitle("Crear tarea");
 
         Button btn_cancelar = view.findViewById(R.id.btn_cancelar);
-        btn_cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //cerrar el dialogo
-            }
-        });
+        btn_cancelar.setOnClickListener(view1 -> getDialog().dismiss());
 
         Button btn_guardar = view.findViewById(R.id.btn_guardar);
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Tarea tarea = new Tarea(asignatura, descripcion.getText(), fechaEntrega.getText(),hora, "En proceso");
-                //Pasarlo de vuelta a la mainActivity?
+                descripcion = txt_descripcion.getText().toString();
+                Tarea tarea = new Tarea(asignatura, fechaEntrega_txt.getText().toString(),descripcion ,horaEntrega_txt.getText().toString(), "Pendiente");
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Tarea", tarea);
+                listener.guardarTarea(bundle);
+                dismiss();
             }
         });
 
         return builder.create();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (DialogoFragmentListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context + " debe implementar DialogoFragmentListener");
+        }
     }
 }

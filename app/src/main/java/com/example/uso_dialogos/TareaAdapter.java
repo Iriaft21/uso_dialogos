@@ -12,10 +12,16 @@ import java.util.ArrayList;
 
 public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHolder> {
 
-    private ArrayList<Tarea> coleccion;
+    public interface OnItemLongClickListener{
+        void onItemLongClick(View view, int position);
+    }
 
-    public TareaAdapter(ArrayList<Tarea> coleccion) {
+    private ArrayList<Tarea> coleccion;
+    private OnItemLongClickListener itemLongClickListener;
+
+    public TareaAdapter(ArrayList<Tarea> coleccion, OnItemLongClickListener itemLongClickListener){
         this.coleccion = coleccion;
+        this.itemLongClickListener = itemLongClickListener;
     }
 
     @NonNull
@@ -23,7 +29,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
     public TareaAdapter.TareaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         TareaAdapter.TareaViewHolder cartaViewHolder =
                 new TareaViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.tarea, parent, false)
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.tarea, parent, false), itemLongClickListener
                 );
         return cartaViewHolder;
     }
@@ -40,21 +46,35 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
 
     @Override
     public int getItemCount() {
-        return 0;
+        return coleccion.size();
     }
 
-    public class TareaViewHolder extends RecyclerView.ViewHolder{
+    public class TareaViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         TextView asignatura;
         TextView descripcion;
         TextView entrega;
         TextView estado;
+        OnItemLongClickListener itemLongClickListener;
 
-        public TareaViewHolder(@NonNull View itemView) {
+        public TareaViewHolder(@NonNull View itemView, OnItemLongClickListener itemLongClickListener) {
             super(itemView);
             asignatura = itemView.findViewById(R.id.asigantura);
             descripcion = itemView.findViewById(R.id.descripcion);
             entrega = itemView.findViewById(R.id.entrega);
             estado = itemView.findViewById(R.id.estado);
+
+            this.itemLongClickListener = itemLongClickListener;
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                itemLongClickListener.onItemLongClick(view, position);
+                return true;
+            }
+            return false;
         }
     }
 }
