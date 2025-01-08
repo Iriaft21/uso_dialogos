@@ -75,13 +75,17 @@ public class MainActivity extends AppCompatActivity implements DialogoFragment.D
             rvTareas.getAdapter().notifyDataSetChanged();
             tarea.toString();
         }
-       Log.i("Prueba", tareas.toString());
+        Collections.sort(tareas, Comparator.comparing(Tarea::getAsignatura));
     }
 
     @Override
     public void onItemLongClick(View view, int position) {
         //TODO Hacer las acciones de los clicks
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+        Tarea tarea = tareas.get(position);
+
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(tarea, tareas);
         bottomSheetFragment.show(getSupportFragmentManager(), "BottomSheet");
+        //TODO no actualizan los datos a pesar de que la tarea este completa
+        rvTareas.getAdapter().notifyDataSetChanged();
     }
 }

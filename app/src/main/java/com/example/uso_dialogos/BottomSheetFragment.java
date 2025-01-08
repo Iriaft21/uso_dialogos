@@ -4,17 +4,29 @@ package com.example.uso_dialogos;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
+
 public class BottomSheetFragment  extends BottomSheetDialogFragment {
+
+    private Tarea tarea;
+    private ArrayList<Tarea> tareas;
+
+    public BottomSheetFragment(Tarea tarea, ArrayList<Tarea> tareas){
+        this.tarea = tarea;
+        this.tareas = tareas;
+    }
 
     @NonNull
     @Override
@@ -37,7 +49,8 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
         modificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Redirigir al otro Dialog
+                //TODO Redirigir al otro Dialog y pasarle la clase
+
             }
         });
 
@@ -47,7 +60,9 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //marcar la tarea en cuestion como completada    tareax.setEstado("Completado");
+                        tarea.setEstado("Completado");
+                        dismiss();
+                        Log.i("Prueba", tarea.toString());
                     }
                 });
                 builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -66,7 +81,7 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
                 builder2.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //eliminar la tarea
+                        tareas.remove(tarea);
                     }
                 });
                 builder2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
