@@ -12,20 +12,25 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class BottomSheetFragment  extends BottomSheetDialogFragment {
 
     private Tarea tarea;
     private ArrayList<Tarea> tareas;
+    private RecyclerView rvTareas;
 
-    public BottomSheetFragment(Tarea tarea, ArrayList<Tarea> tareas){
+    public BottomSheetFragment(Tarea tarea, ArrayList<Tarea> tareas, RecyclerView rvTareas){
         this.tarea = tarea;
         this.tareas = tareas;
+        this.rvTareas = rvTareas;
     }
 
     @NonNull
@@ -49,8 +54,8 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
         modificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Redirigir al otro Dialog y pasarle la clase
-
+                DialogFragment dialogFragment = new DialogoFragment(tarea, rvTareas, tareas);
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "Dialogo");
             }
         });
 
@@ -61,8 +66,8 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         tarea.setEstado("Completado");
+                        rvTareas.getAdapter().notifyDataSetChanged();
                         dismiss();
-                        Log.i("Prueba", tarea.toString());
                     }
                 });
                 builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -82,6 +87,7 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         tareas.remove(tarea);
+                        rvTareas.getAdapter().notifyDataSetChanged();
                     }
                 });
                 builder2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

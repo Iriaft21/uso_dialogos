@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,16 +22,32 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DialogoFragment extends DialogFragment {
 
     private String asignatura;
     private String descripcion;
     private DialogoFragmentListener listener;
+    private RecyclerView rvTareas;
+    private Tarea tarea;
+    private ArrayList<Tarea> tareas;
 
     public interface DialogoFragmentListener {
         void guardarTarea(Bundle bundle);
+    }
+
+    public DialogoFragment(){
+
+    }
+
+    public DialogoFragment(Tarea tarea, RecyclerView rvTareas, ArrayList<Tarea> tareas){
+        this.tarea = tarea;
+        this.tareas = tareas;
+        this.rvTareas = rvTareas;
     }
 
     @NonNull
@@ -40,7 +57,6 @@ public class DialogoFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_dialogo, null);
 
-        // Configurar el Spinner aquí
         Spinner spinner = view.findViewById(R.id.spinner_asignatura);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.asignaturas, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -58,6 +74,16 @@ public class DialogoFragment extends DialogFragment {
 
         TextView txt_descripcion = view.findViewById(R.id.txt_descripcion);
         TextView fechaEntrega_txt = view.findViewById(R.id.txt_entrega);
+        TextView horaEntrega_txt = view.findViewById(R.id.txt_horaentrega);
+
+        if(tarea != null){
+            txt_descripcion.setText(tarea.getDescripcion());
+            fechaEntrega_txt.setText(tarea.getFechaEntrega());
+            horaEntrega_txt.setText(tarea.getHoraEntrega());
+
+            int posicionSpinner = adapter.getPosition(tarea.getAsignatura());
+            spinner.setSelection(posicionSpinner);
+        }
         fechaEntrega_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +107,6 @@ public class DialogoFragment extends DialogFragment {
             }
         });
 
-        TextView horaEntrega_txt = view.findViewById(R.id.txt_horaentrega);
         horaEntrega_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +130,7 @@ public class DialogoFragment extends DialogFragment {
         });
 
         builder.setView(view);
-        builder.setTitle("Crear tarea");
+        builder.setTitle(tarea != null? "Modificar tarea": "Crear tarea");
 
         Button btn_cancelar = view.findViewById(R.id.btn_cancelar);
         btn_cancelar.setOnClickListener(view1 -> getDialog().dismiss());
@@ -115,10 +140,19 @@ public class DialogoFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 descripcion = txt_descripcion.getText().toString();
-                Tarea tarea = new Tarea(asignatura, fechaEntrega_txt.getText().toString(),descripcion ,horaEntrega_txt.getText().toString(), "Pendiente");
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Tarea", tarea);
-                listener.guardarTarea(bundle);
+                if(tarea!= null){
+                    tarea.setAsignatura(asignatura);
+                    tarea.setFechaEntrega(fechaEntrega_txt.getText().toString());
+                    tarea.setDescripcion(descripcion);
+                    tarea.setHoraEntrega(horaEntrega_txt.getText().toString());
+                    rvTareas.getAdapter().notifyDataSetChanged();
+                    Collections.sort(tareas, Comparator.comparing(Tarea::getAsignatura));
+                } else{
+                    Tarea tarea = new Tarea(asignatura, fechaEntrega_txt.getText().toString(),descripcion ,horaEntrega_txt.getText().toString(), "Pendiente");
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("Tarea", tarea);
+                    listener.guardarTarea(bundle);
+                }
                 dismiss();
             }
         });

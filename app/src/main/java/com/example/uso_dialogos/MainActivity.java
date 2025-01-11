@@ -50,19 +50,13 @@ public class MainActivity extends AppCompatActivity implements DialogoFragment.D
                 dialogFragment.show(getSupportFragmentManager(), "Dialogo");
             }
         });
-        // Generar y añadir tareas de ejemplo
-        tareas.add(new Tarea("EIE", "25-12-2024", "Resumen", "10:00", "En proceso"));
-        tareas.add(new Tarea("PMDM", "26-12-2024", "Uso dialogos", "14:30", "Pendiente"));
-        tareas.add(new Tarea("PSP", "27-12-2024", "Estudiar recuperacion", "09:00", "En proceso"));
-        tareas.add(new Tarea("DINT", "28-12-2024", "Trabajo unidad 2", "18:00", "Completado"));
-        tareas.add(new Tarea("AD", "29-12-2024", "Ejercicio BaseX", "16:00", "Pendiente"));
-        tareas.add(new Tarea("EIE", "25-12-2024", "Resumen", "10:00", "En proceso"));
-        tareas.add(new Tarea("PMDM", "26-12-2024", "Uso dialogos", "14:30", "Pendiente"));
-        tareas.add(new Tarea("PSP", "27-12-2024", "Estudiar recuperacion", "09:00", "En proceso"));
-        tareas.add(new Tarea("DINT", "28-12-2024", "Trabajo unidad 2", "18:00", "Completado"));
-        tareas.add(new Tarea("AD", "29-12-2024", "Ejercicio BaseX", "16:00", "Pendiente"));
 
-        rvTareas.getAdapter().notifyDataSetChanged();
+        tareas.add(new Tarea("EIE", "25-12-2024", "Resumen", "10:00", "En proceso"));
+        tareas.add(new Tarea("PMDM", "26-12-2024", "Uso dialogos", "14:30", "Pendiente"));
+        tareas.add(new Tarea("PSP", "27-12-2024", "Estudiar recuperacion", "09:00", "En proceso"));
+        tareas.add(new Tarea("DINT", "28-12-2024", "Trabajo unidad 2", "18:00", "Completado"));
+        tareas.add(new Tarea("AD", "29-12-2024", "Ejercicio BaseX", "16:00", "Pendiente"));
+        tareas.add(new Tarea("AD", "29-12-2024", "Ejercicio BaseX", "16:00", "Pendiente"));
 
         Collections.sort(tareas, Comparator.comparing(Tarea::getAsignatura));
     }
@@ -72,20 +66,17 @@ public class MainActivity extends AppCompatActivity implements DialogoFragment.D
         Tarea tarea = bundle.getParcelable("Tarea");
         if(tarea != null){
             tareas.add(tarea);
-            rvTareas.getAdapter().notifyDataSetChanged();
-            tarea.toString();
+            tareaAdapter.notifyItemInserted(tareas.size() - 1); // Notificar la adición de la tarea
         }
         Collections.sort(tareas, Comparator.comparing(Tarea::getAsignatura));
     }
 
     @Override
     public void onItemLongClick(View view, int position) {
-        //TODO Hacer las acciones de los clicks
         Tarea tarea = tareas.get(position);
 
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(tarea, tareas);
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(tarea, tareas, rvTareas);
         bottomSheetFragment.show(getSupportFragmentManager(), "BottomSheet");
-        //TODO no actualizan los datos a pesar de que la tarea este completa
         rvTareas.getAdapter().notifyDataSetChanged();
     }
 }
