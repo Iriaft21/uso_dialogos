@@ -56,6 +56,7 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 DialogFragment dialogFragment = new DialogoFragment(tarea, rvTareas, tareas);
                 dialogFragment.show(requireActivity().getSupportFragmentManager(), "Dialogo");
+                dismiss();
             }
         });
 
@@ -88,6 +89,7 @@ public class BottomSheetFragment  extends BottomSheetDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         tareas.remove(tarea);
                         rvTareas.getAdapter().notifyDataSetChanged();
+                        dismiss();
                     }
                 });
                 builder2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
